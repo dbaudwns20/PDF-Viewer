@@ -2,13 +2,12 @@
 
 import "core-js/full/promise/with-resolvers";
 import * as pdfjsLib from "pdfjs-dist";
-import pdfjsWorker from "pdfjs-dist/build/pdf.worker.min.mjs";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `${pdfjsWorker}`;
+pdfjsLib.GlobalWorkerOptions.workerSrc = `${import(
+  "pdfjs-dist/build/pdf.worker.min.mjs"
+)}`;
 
 import { useRef, ChangeEvent } from "react";
-
-const outputScale: number = window.devicePixelRatio || 1;
 
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -23,11 +22,12 @@ export default function Home() {
 
     // Get the first page of the PDF
     const page = await pdfDoc.getPage(1);
-    const viewport = page.getViewport({ scale: 1.0 });
+    const viewport = page.getViewport({ scale: 1 });
 
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    const outputScale: number = window.devicePixelRatio || 1;
     const context = canvas.getContext("2d");
     canvas.height = Math.floor(viewport.height * outputScale);
     canvas.width = Math.floor(viewport.width * outputScale);
@@ -67,7 +67,7 @@ export default function Home() {
   };
 
   return (
-    <main className="">
+    <main className="flex flex-col h-[100vh]">
       <header className="bg-[#f9f9fa] border border-b-[#b8b8b8] h-10 flex items-center px-3 justify-between">
         <span className="text-xl font-bold">PDF Viewer</span>
         <div className="flex items-center">
@@ -88,7 +88,7 @@ export default function Home() {
           />
         </div>
       </header>
-      <section className="h-full w-full p-3">
+      <section className="h-full w-full overflow-hidden">
         <div className="w-full h-full overflow-auto" tabIndex={0}>
           <canvas ref={canvasRef} />
           <div
