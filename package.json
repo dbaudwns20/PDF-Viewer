@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/lodash": "^4.17.12",
     "core-js": "^3.38.1",
+    "lodash": "^4.17.21",
     "next": "15.0.1",
     "pdfjs-dist": "^4.7.76",
     "react": "19.0.0-rc-69d4b800-20241021",
